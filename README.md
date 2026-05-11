@@ -6,9 +6,9 @@
 
 This repository contains the official source code and experimental pipeline for the paper: **"Evaluating Oversampling Methods for Imbalanced Arabic Dialect Identification"**. 
 
-This project aims to classify Arabic dialects using a feature-engineered machine learning approach, focusing specifically on handling **severe class imbalance** through density-based oversampling techniques in a highly sparse 5,644-dimensional text feature space.
+This project investigates Arabic dialect identification using a feature-engineered machine learning approach, focusing specifically on handling **severe class imbalance** through density-based oversampling techniques in a highly sparse 5,644-dimensional text feature space.
 
-## 📈 Imbalance Handling Methods Evaluated
+## 📈 Evaluated Imbalance Handling Methods
 This project explores and rigorously evaluates several data-level and algorithm-level approaches:
 * **Original** (Imbalanced data without resampling)
 * **SMOTE** (Standard Synthetic Minority Over-sampling Technique)
@@ -50,17 +50,27 @@ pip install -r requirements.txt
 
 ## 🌐 Interactive Streamlit Dashboard
 
-This repository also includes an interactive **Streamlit-based Arabic Dialect Identification dashboard** for real-time inference and qualitative analysis.
+A live deployment of the dashboard is available here:
 
-The dashboard provides:
+👉 [Live Streamlit Demo](https://arabic-dialect-identification.streamlit.app/)
 
-* Real-time single-text dialect prediction
-* Batch inference for multiple Arabic texts
-* Probability distribution visualization across Levantine dialects
-* Preprocessing pipeline inspection
-* Debug mode for normalization and tokenization diagnostics
-* Interactive comparison across imbalance mitigation strategies
-* Support for LightGBM and XGBoost experimental configurations
+This repository also includes a Streamlit-based Arabic Dialect Identification dashboard for real-time inference and qualitative analysis.
+
+The dashboard source code is included for reproducibility and demonstration purposes. However, pretrained inference artifacts are excluded from the repository due to storage constraints.
+
+> **Note:** The Streamlit dashboard requires pretrained model artifacts and feature extraction assets that are not included in this repository.
+
+### 📦 Required Inference Artifacts
+
+The interactive dashboard depends on several pretrained assets that are excluded from version control:
+
+- Trained LightGBM and XGBoost model files (`model_*.pkl`)
+- Feature extraction pipeline (`shami_feature_extractor.pkl`)
+- Label encoder (`label_encoder.pkl`)
+
+These artifacts are omitted due to repository size limitations and deployment constraints.
+
+These artifacts can be reproduced by executing the full experimental pipeline described in the notebook execution order below.
 
 ### 🚀 Launch the Dashboard
 
@@ -97,13 +107,16 @@ After launching, open the local URL displayed in the terminal (typically `http:/
   - Balanced Weighting
 
 * **Robust Invalid Input Handling**
-  Inputs without meaningful Arabic dialectal content are automatically detected and safely rejected as:
-  
+
+  Inputs without sufficient Arabic dialectal content are automatically detected and safely rejected as:
+
   > *Dialect Not Detected*
 
 ### 🖼️ Dashboard Preview
 
 <img src="app-streamlit/dashboard_preview.png" alt="Dashboard Preview" width="60%">
+
+> ⚠️ The dashboard is intended primarily for qualitative analysis and research demonstration rather than production deployment.
 
 ## 📊 Dataset
 
@@ -152,7 +165,7 @@ To reproduce the exact findings reported in the paper and ensure a strict, leaka
 
 ## ⚠️ Important Notes
 
-- Temporary files such as `cache`, `__pycache__`, and generated artifacts are intentionally excluded via `.gitignore`.
+- Temporary files, caches, and large pretrained inference artifacts are intentionally excluded via `.gitignore`.
 
 - The pipeline is designed with a strict train/validation/test split to prevent data leakage during out-of-fold stacking and resampling.
 
