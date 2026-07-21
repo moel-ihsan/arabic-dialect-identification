@@ -1,7 +1,10 @@
 .DS_Store
 __pycache__/
-artifacts/
+**/model/
+artifacts/for_arcticle/
+**/*.pkl
 cache/
 ignore/
 *.pyc
 .ipynb_checkpoints/
+*.py
