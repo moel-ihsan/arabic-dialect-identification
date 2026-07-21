@@ -1,0 +1,11 @@
+Cluster,Size,Majority,Purity,Status,Jordan_Count,Jordan_%,Lebanon_Count,Lebanon_%,Palestine_Count,Palestine_%,Syria_Count,Syria_%,Composition
+14,122,Lebanon,100.0,SAFE,0,0.0,122,100.0,0,0.0,0,0.0,Lebanon 100.0%
+41,466,Syria,100.0,SAFE,0,0.0,0,0.0,0,0.0,466,100.0,Syria 100.0%
+78,449,Syria,100.0,SAFE,0,0.0,0,0.0,0,0.0,449,100.0,Syria 100.0%
+77,257,Lebanon,100.0,SAFE,0,0.0,257,100.0,0,0.0,0,0.0,Lebanon 100.0%
+22,106,Syria,100.0,SAFE,0,0.0,0,0.0,0,0.0,106,100.0,Syria 100.0%
+74,146,Syria,100.0,SAFE,0,0.0,0,0.0,0,0.0,146,100.0,Syria 100.0%
+73,427,Syria,100.0,SAFE,0,0.0,0,0.0,0,0.0,427,100.0,Syria 100.0%
+23,103,Lebanon,100.0,SAFE,0,0.0,103,100.0,0,0.0,0,0.0,Lebanon 100.0%
+111,117,Syria,100.0,SAFE,0,0.0,0,0.0,0,0.0,117,100.0,Syria 100.0%
+42,250,Syria,100.0,SAFE,0,0.0,0,0.0,0,0.0,250,100.0,Syria 100.0%

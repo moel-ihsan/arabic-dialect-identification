@@ -1,0 +1,5 @@
+kelas_target,original_samples,target_volume,generated,final_samples,n_safe_clusters,safe_samples,safe_zone_ratio,safe_purity_mean,safe_purity_weighted,alpha
+Lebanon,6498,19423,12925,19423,23,4963,0.7638,0.884,0.8263,0.5275
+Palestine,6385,19401,13016,19401,22,4398,0.6888,0.8972,0.8858,0.3776
+Jordan,4210,7899,3689,7899,14,2117,0.5029,0.9216,0.9005,0.0057
+ 
