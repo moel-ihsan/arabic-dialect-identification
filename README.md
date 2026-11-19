@@ -18,7 +18,7 @@ This project investigates **Levantine Arabic dialect classification** on the **S
 - **Journal Publication (IJEECS, July 2026)**: https://doi.org/10.11591/ijeecs.v43.i1.pp259-270
 - **UGM M.Cs. Thesis (ETD Repository)**: https://etd.repository.ugm.ac.id/penelitian/detail/282346
 
-> **Note on Pretrained Models (`**/model/` & `**/*.pkl`)**: Serialized `.pkl` checkpoints and feature extractors are excluded from this research repository by `.gitignore` (`**/model/`, `**/*.pkl`). Ten trained LightGBM and XGBoost checkpoints along with the `shami_feature_extractor.pkl` pipeline are hosted via Git LFS in [`arabic-dialect-id-demo`](https://github.com/moel-ihsan/arabic-dialect-id-demo). Running the notebooks locally generates per-experiment `.pkl` checkpoints under `artifacts/<composition>/model/` (including `model_lightgbm_astra_radiant.pkl` and `model_xgboost_astra_radiant.pkl`).
+> **Note on Pretrained Models (`**/model/` & `**/*.pkl`)**: Serialized `.pkl` checkpoints and feature extractors are excluded from this research repository by `.gitignore` (`**/model/`, `**/*.pkl`). All 12 trained LightGBM and XGBoost checkpoints (spanning `Original`, `SMOTE`, `ASTRA-SMOTE`, `SMOTE-RADIANT`, `ASTRA-RADIANT`, and `Class Weight`) along with the `shami_feature_extractor.pkl` pipeline are hosted via Git LFS in [`arabic-dialect-id-demo`](https://github.com/moel-ihsan/arabic-dialect-id-demo). Running the notebooks locally generates per-experiment `.pkl` checkpoints under `artifacts/<composition>/model/` (including `model_lightgbm_astra_radiant.pkl` and `model_xgboost_astra_radiant.pkl`).
 
 ---
 
