@@ -1,195 +1,136 @@
-# Evaluating Oversampling Methods for Imbalanced Arabic Dialect Identification
+# Imbalanced Levantine Arabic Dialect Identification
 
-[![Paper Status](https://img.shields.io/badge/Paper-Under%20Review-yellow.svg)]()
-[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Streamlit-FF6B19?logo=streamlit)](https://arabic-dialect-identification.streamlit.app/)
+[![IJEECS 2026](https://img.shields.io/badge/IJEECS%202026-10.11591%2Fijeecs.v43.i1.pp259--270-2663EB)](https://doi.org/10.11591/ijeecs.v43.i1.pp259-270)
+[![UGM Thesis](https://img.shields.io/badge/UGM%20ETD-M.Cs.%20Thesis%202026-0BA5A0)](https://etd.repository.ugm.ac.id/penelitian/detail/282346)
+[![License: MIT](https://img.shields.io/badge/License-MIT-16A349.svg)](https://opensource.org/licenses/MIT)
 
-This repository contains the official source code and experimental pipeline for the paper: **"Evaluating Oversampling Methods for Imbalanced Arabic Dialect Identification"**. 
+Official research codebase, experimental notebooks, and evaluation artifacts for the **IJEECS 2026 journal article** (*Evaluating oversampling methods for imbalanced Arabic dialect identification*, Vol. 43, No. 1, pp. 259–270) and the **Universitas Gadjah Mada M.Cs. Thesis (2026)** (*Cluster and Density-Based Hybrid Oversampling Model for Handling Imbalanced Data in Arabic Dialect Classification*).
 
-This project investigates Arabic dialect identification using a feature-engineered machine learning approach, focusing specifically on handling **severe class imbalance** through density-based oversampling techniques in a highly sparse 5,644-dimensional text feature space.
+This project investigates **Levantine Arabic dialect classification** on the **Shami Dialect Corpus** (`N = 66,247` tweets across Syrian, Lebanese, Palestinian, and Jordanian dialects) in a sparse-dense **5,644-dimensional** feature space, combining cluster-purity synthesis (**ASTRA-SMOTE**), cosine density post-filtering (**SMOTE-RADIANT**), and sequential hybridization (**ASTRA-RADIANT**).
 
-## 📈 Evaluated Imbalance Handling Methods
-This project explores and rigorously evaluates several data-level and algorithm-level approaches:
-* **Original** (Imbalanced data without resampling)
-* **SMOTE** (Standard Synthetic Minority Over-sampling Technique)
-* **ASTRA-SMOTE** (*Adaptive Safe-Threshold Resampling Algorithm* - implemented in files as `knsmote`)
-* **SMOTE-RADIANT** (*Robust Auto-Density Inter-class Anomaly Neutralization Technique* - implemented in files as `dbscansmote`)
-* **Balanced Weighting** (Cost-sensitive learning via inverse-frequency weights)
+---
 
-**Classifiers Used:** LightGBM (leaf-wise) and XGBoost (level-wise).
+## Links & Interactive Demo
 
-## 🏆 Key Findings & Results
+- **Live Streamlit Application**: https://arabic-dialect-identification.streamlit.app/
+- **Refactored Demo Repository & Git LFS Model Checkpoints**: https://github.com/moel-ihsan/arabic-dialect-id-demo
+- **Journal Publication (IJEECS, July 2026)**: https://doi.org/10.11591/ijeecs.v43.i1.pp259-270
+- **UGM M.Cs. Thesis (ETD Repository)**: https://etd.repository.ugm.ac.id/penelitian/detail/282346
 
-Our empirical evaluation in a 5,644-dimensional sparse text space revealed that conventional generative oversampling (SMOTE) and cost-sensitive weighting (Balanced Weighting) often distort decision boundaries, sacrificing majority-class precision for minority-class recall. 
+> **Note on Pretrained Models (`**/model/` & `**/*.pkl`)**: Serialized `.pkl` checkpoints and feature extractors are excluded from this research repository by `.gitignore` (`**/model/`, `**/*.pkl`). Ten trained LightGBM and XGBoost checkpoints along with the `shami_feature_extractor.pkl` pipeline are hosted via Git LFS in [`arabic-dialect-id-demo`](https://github.com/moel-ihsan/arabic-dialect-id-demo). Running the notebooks locally generates per-experiment `.pkl` checkpoints under `artifacts/<composition>/model/` (including `model_lightgbm_astra_radiant.pkl` and `model_xgboost_astra_radiant.pkl`).
 
-The proposed density-filtered approach, **SMOTE-RADIANT**, paired with a leaf-wise gradient boosting architecture (LightGBM), emerged as the champion configuration:
+---
 
-* **Superior Performance:** Achieved the highest Macro-F1 score (**0.8539**) and overall accuracy (**89.70%**).
-* **Safe Minority Rescue:** Successfully improved the recognition of the severely underrepresented Jordanian dialect without substantially degrading the majority Syrian class.
-* **Statistical Significance:** 1,000-iteration bootstrapping confirmed that the improvement over the original baseline is highly significant (*p < 0.001*) with a large effect size (Cohen's *r* = 0.511).
-* **Noise Reduction:** RADIANT autonomously filtered out ~18% of overlapping synthetic anomalies, preserving inter-class boundary structure.
+## Evaluated Imbalance Handling Scenarios (12 Setups)
 
-*(For detailed confusion matrices, per-class metrics, and feature importance analysis, please refer to the main paper).*
+All six scenarios are evaluated across leaf-wise **LightGBM** and level-wise **XGBoost** on a strictly leakage-free stratified **60 / 15 / 25** partition (`39,748` train / `9,937` validation / `16,562` held-out test tweets):
 
-## ⚙️ Installation & Setup
+| Scenario | Notebook Key | Paradigm | Core Mechanism |
+| :--- | :--- | :--- | :--- |
+| **Original** | `original` | Baseline | Natural imbalanced training distribution (`57.0%` SY vs. `10.6%` JO) |
+| **SMOTE** | `smote` | Unconstrained Generative | Linear `k`-NN interpolation (`k = 5`, `+29,630` synthetic samples) |
+| **ASTRA-SMOTE** | `knsmote` | Preventive Cluster-Purity | Restricts synthesis to safe MiniBatchKMeans clusters (`59/128` > 50% purity) |
+| **SMOTE-RADIANT** | `dbscansmote` | Corrective Density-Filtered | Purges noisy synthetic outliers via cosine DBSCAN (`5,336` dropped; `18.0%`) |
+| **ASTRA-RADIANT** | `kndbsmote` | Sequential Hybrid | Chains preventive ASTRA-SMOTE with corrective RADIANT (`3,526` dropped; `11.9%`) |
+| **Class Weight** | `balanced_weighted` | Cost-Sensitive | Inverse-frequency weighting (`SY=1.00`, `LB=3.49`, `PS=3.55`, `JO=5.38`) |
 
-It is highly recommended to use a virtual environment to run this pipeline:
+---
+
+## Key Held-Out Test Results (`N = 16,562`)
+
+| Architecture | Scenario | Accuracy | Macro-Prec | Macro-Rec | Macro-F1 | JO Recall |
+| :--- | :--- | :---: | :---: | :---: | :---: | :---: |
+| LightGBM | Original | 0.8963 | 0.8627 | 0.8439 | 0.8526 | 0.7520 |
+| LightGBM | SMOTE | 0.8961 | 0.8584 | 0.8463 | 0.8518 | 0.7503 |
+| LightGBM | ASTRA-SMOTE | 0.8959 | 0.8603 | 0.8443 | 0.8517 | 0.7503 |
+| **LightGBM** | **SMOTE-RADIANT** | **0.8974** | **0.8620** | **0.8469** | **0.8539** | 0.7543 |
+| LightGBM | ASTRA-RADIANT | 0.8970 | 0.8625 | 0.8448 | 0.8529 | 0.7491 |
+| LightGBM | Class Weight | 0.8931 | 0.8431 | 0.8578 | 0.8502 | 0.7930 |
+| XGBoost | Original | 0.8960 | 0.8620 | 0.8429 | 0.8517 | 0.7469 |
+| XGBoost | SMOTE | 0.8964 | 0.8602 | 0.8454 | 0.8524 | 0.7537 |
+| XGBoost | ASTRA-SMOTE | 0.8956 | 0.8604 | 0.8430 | 0.8511 | 0.7486 |
+| XGBoost | SMOTE-RADIANT | 0.8964 | 0.8618 | 0.8445 | 0.8525 | 0.7497 |
+| **XGBoost** | **ASTRA-RADIANT** | **0.8977** | **0.8640** | **0.8464** | **0.8546** | **0.7548** |
+| XGBoost | Class Weight | 0.8934 | 0.8427 | 0.8587 | 0.8504 | 0.7948 |
+
+### Highlights
+- **Architecture-Dependent Hybridization**: Sequential **ASTRA-RADIANT** reaches the highest overall score on level-wise **XGBoost** (`0.8546` Macro-F1, `89.77%` accuracy), whereas density-filtered **SMOTE-RADIANT** leads on leaf-wise **LightGBM** (`0.8539` Macro-F1, `89.74%` accuracy).
+- **Spatial Intrusion Reduction**: **ASTRA-RADIANT** reduces Jordanian synthetic inter-class intrusion from `16.54%` (standard SMOTE) to `1.05%` and minimizes global cluster overlap (`0.9731`).
+- **Bootstrap Validation**: `N = 1,000` paired two-sided Wilcoxon signed-rank tests confirm statistically significant gains (*p* < 0.001) over unconstrained baselines and Class Weighting.
+
+---
+
+## Repository Structure & Execution Order
+
+To reproduce the leakage-free 5,644-dimensional feature matrix, resampling runs, and analysis artifacts (`artifacts/`), execute the notebooks in order:
+
+### 1. Preprocessing, Oversampling Core & Tuning
+- `0. feature_engineering.ipynb` — Arabic cleaning, normalization, `stopwords.txt` filtering, 12-block (`5,644`-dim) sparse-dense fusion, and out-of-fold LR/SVM stacking
+- `0. hybrid_oversampling.ipynb` — `ASTRA-SMOTE`, `SMOTE-RADIANT`, and sequential `ASTRA-RADIANT` implementations
+- `0. utils_ml.ipynb` — shared training, evaluation, and logging helpers
+- `1.5. joint_search.ipynb` — joint search for target sampling volumes and hyperparameters
+
+### 2. Model Training Notebooks (LightGBM & XGBoost)
+- **Original Baseline**: `1. lightgbm_original.ipynb`, `1. xgboost_original.ipynb`
+- **SMOTE**: `2. lightgbm_smote.ipynb`, `2. xgboost_smote.ipynb`
+- **ASTRA-SMOTE**: `3A. lightgbm_knsmote.ipynb`, `3A. xgboost_knsmote.ipynb`
+- **SMOTE-RADIANT**: `3B. lightgbm_dbscansmote.ipynb`, `3B. xgboost_dbscansmote.ipynb`
+- **Class Weight**: `4. lightgbm_balanced_weighted.ipynb`, `4. xgboost_balanced_weighted.ipynb`
+- **ASTRA-RADIANT**: `5. lightgbm_kndbsmote.ipynb`, `5. xgboost_kndbsmote.ipynb`
+
+### 3. Spatial, Statistical & Error Analysis Notebooks
+- `z. analysis_cluster_purity.ipynb` — safe-zone cluster purity and inter-class intrusion analysis
+- `z. analysis_effect_size.ipynb` — `N = 1,000` bootstrap paired Wilcoxon tests and effect sizes
+- `z. analysis_entropy_margin_conf.ipynb` — confidence, margin, and Shannon entropy boundary audits
+- `z. analysis_token_exclusivity_error.ipynb` — dialect-exclusive token collapse analysis
+
+### 4. Interactive Demo Application
+The `app-streamlit/` directory preserves the initial research prototype. The redesigned, production interactive dashboard and Git LFS model artifacts are maintained in [`moel-ihsan/arabic-dialect-id-demo`](https://github.com/moel-ihsan/arabic-dialect-id-demo) and deployed at https://arabic-dialect-identification.streamlit.app/.
+
+---
+
+## Environment Setup & Dataset
 
 ```bash
-# Create virtual environment
 python -m venv .venv
-
-# Activate virtual environment (Linux/macOS)
-source .venv/bin/activate
-# Or on Windows:
-# .venv\Scripts\activate
-
-# Install dependencies
+source .venv/bin/activate      # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-## 🌐 Interactive Streamlit Dashboard
+This study uses the public **Shami Dialect Corpus** (Kwaik et al., 2018, LREC). Due to dataset size and redistribution terms, raw corpus files are placed locally under `dataset/` prior to running `0. feature_engineering.ipynb`.
 
-A live deployment of the dashboard is available here:
+---
 
-👉 [Live Streamlit Demo](https://arabic-dialect-identification.streamlit.app/)
-
-This repository also includes a Streamlit-based Arabic Dialect Identification dashboard for real-time inference and qualitative analysis.
-
-The dashboard source code is included for reproducibility and demonstration purposes. However, pretrained inference artifacts are excluded from the repository due to storage constraints.
-
-> **Note:** The Streamlit dashboard requires pretrained model artifacts and feature extraction assets that are not included in this repository.
-
-### 📦 Required Inference Artifacts
-
-The interactive dashboard depends on several pretrained assets that are excluded from version control:
-
-- Trained LightGBM and XGBoost model files (`model_*.pkl`)
-- Feature extraction pipeline (`shami_feature_extractor.pkl`)
-- Label encoder (`label_encoder.pkl`)
-
-These artifacts are omitted due to repository size limitations and deployment constraints.
-
-These artifacts can be reproduced by executing the full experimental pipeline described in the notebook execution order below.
-
-### 🚀 Launch the Dashboard
-
-The interactive dashboard is located in the `app-streamlit/` directory.
-
-```bash
-# Move to Streamlit app directory
-cd app-streamlit
-
-# Launch dashboard
-python -m streamlit run app.py
-```
-
-After launching, open the local URL displayed in the terminal (typically `http://localhost:8501`).
-
-### 🧠 Dashboard Features
-
-* **Interactive Inference**
-  Predict Levantine Arabic dialects from raw Arabic text input.
-
-* **Batch Processing**
-  Perform multi-line batch inference and export predictions as CSV.
-
-* **Pipeline Diagnostics**
-  Inspect cleaning, normalization, tokenization, and character-stream transformations.
-
-* **Experiment Configuration**
-  Dynamically switch between:
-  
-  - Original
-  - SMOTE
-  - ASTRA-SMOTE
-  - SMOTE-RADIANT
-  - Balanced Weighting
-
-* **Robust Invalid Input Handling**
-
-  Inputs without sufficient Arabic dialectal content are automatically detected and safely rejected as:
-
-  > *Dialect Not Detected*
-
-### 🖼️ Dashboard Preview
-
-<img src="app-streamlit/dashboard_preview.png" alt="Dashboard Preview" width="60%">
-
-> ⚠️ The dashboard is intended primarily for qualitative analysis and research demonstration rather than production deployment.
-
-## 📊 Dataset
-
-This study utilizes the publicly available **Shami Corpus** (Kwaik et al., 2018) for Levantine Arabic dialect classification (Jordanian, Lebanese, Palestinian, Syrian). 
-
-Please download the dataset from the official repository and place it in the designated directory before running the notebooks:
-`dataset/`
-
-> **Note:** Due to licensing and size constraints, the dataset is not included in this repository.
-
-
-## 📁 Repository Structure & ▶️ Execution Order
-
-To reproduce the exact findings reported in the paper and ensure a strict, leakage-free protocol, please run the Jupyter Notebooks in the following sequential order:
-
-### 🔹 Step 0 — Preprocessing & Utilities
-* `0. feature_engineering.ipynb` *(Text normalization, TF-IDF, MI filtering, OOF Stacking)*
-* `0. hybrid_oversampling.ipynb` *(Implementation of ASTRA-SMOTE and SMOTE-RADIANT algorithms)*
-* `0. utils_ml.ipynb` *(Helper functions for evaluation)*
-
-### 🔹 Step 1 — Original Models (No Resampling)
-* `1. lightgbm_original.ipynb`
-* `1. xgboost_original.ipynb`
-
-### 🔹 Step 1.5 — Hyperparameter Optimization
-* `1.5. joint_search.ipynb` *(Grid search for sampling targets and model hyperparameter tuning)*
-
-### 🔹 Step 2 — SMOTE
-* `2. lightgbm_smote.ipynb`
-* `2. xgboost_smote.ipynb`
-
-### 🔹 Step 3A — ASTRA-SMOTE
-* `3A. lightgbm_knsmote.ipynb`
-* `3A. xgboost_knsmote.ipynb`
-
-### 🔹 Step 3B — SMOTE-RADIANT (Proposed Champion)
-* `3B. lightgbm_dbscansmote.ipynb`
-* `3B. xgboost_dbscansmote.ipynb`
-
-### 🔹 Step 4 — Cost-Sensitive Learning
-* `4. lightgbm_balanced_weighted.ipynb`
-* `4. xgboost_balanced_weighted.ipynb`
-
-### 🔹 Effect Size Analysis
-* `z. effect_size.ipynb` *(1,000-iteration Bootstrapping, Wilcoxon signed-rank tests, and Cohen's effect sizes)*
-
-## ⚠️ Important Notes
-
-- Temporary files, caches, and large pretrained inference artifacts are intentionally excluded via `.gitignore`.
-
-- The pipeline is designed with a strict train/validation/test split to prevent data leakage during out-of-fold stacking and resampling.
-
-- Ensure that the notebooks are executed in the exact order listed above to maintain consistency in feature block generation.
-
-## 📝 Citation
-
-If you find this code, methodology, or experimental pipeline useful for your research, please consider citing:
+## Citation
 
 ```bibtex
 @article{ahmad2026evaluating,
-  title={Evaluating Oversampling Methods for Imbalanced Arabic Dialect Identification},
-  author={Ahmad, Maulana Ihsan and Musdholifah, Aina and Nurwidyantoro, Arif},
-  journal={Indonesian Journal of Electrical Engineering and Computer Science (IJEECS)},
-  year={2026},
-  publisher={IJEECS}
+  title   = {Evaluating oversampling methods for imbalanced Arabic dialect identification},
+  author  = {Ahmad, Maulana Ihsan and Musdholifah, Aina and Nurwidyantoro, Arif},
+  journal = {Indonesian Journal of Electrical Engineering and Computer Science (IJEECS)},
+  volume  = {43},
+  number  = {1},
+  pages   = {259--270},
+  year    = {2026},
+  month   = {July},
+  issn    = {2502-4752},
+  doi     = {10.11591/ijeecs.v43.i1.pp259-270}
+}
+
+@mastersthesis{ahmad2026hybrid,
+  title  = {Cluster and Density-Based Hybrid Oversampling Model for Handling Imbalanced Data in Arabic Dialect Classification},
+  author = {Ahmad, Maulana Ihsan},
+  school = {Department of Computer Science and Electronics, Universitas Gadjah Mada},
+  year   = {2026},
+  url    = {https://etd.repository.ugm.ac.id/penelitian/detail/282346}
 }
 ```
 
-> ⚠️ **Note:** Citation details (volume, issue, and DOI) will be updated upon publication.
+---
 
+## Authors & Affiliation
 
-
-## 👥 Authors & Affiliation
-
-- **Maulana Ihsan Ahmad**, **Aina Musdholifah**, **Arif Nurwidyantoro**
-- *Department of Computer Science and Electronics, Universitas Gadjah Mada, Indonesia*
+- **Maulana Ihsan Ahmad** — Lead Researcher & M.Cs. Student, Department of Computer Science and Electronics, Universitas Gadjah Mada (`maulanaihsanahmad@mail.ugm.ac.id`)
+- **Aina Musdholifah, Ph.D.** — Co-Author & Thesis Supervisor, Intelligent Systems Laboratory, Universitas Gadjah Mada (`aina_m@ugm.ac.id`)
+- **Arif Nurwidyantoro, Ph.D.** — Corresponding Author & Co-Supervisor, Software and Data Engineering Laboratory, Universitas Gadjah Mada (`arifn@ugm.ac.id`)
