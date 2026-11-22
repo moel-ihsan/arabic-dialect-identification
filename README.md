@@ -1,6 +1,6 @@
 # Imbalanced Levantine Arabic Dialect Identification
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Streamlit-FF6B19?logo=streamlit)](https://arabic-dialect-identification.streamlit.app/)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Streamlit-0BA5A0?logo=streamlit)](https://arabic-dialect-identification.streamlit.app/)
 [![IJEECS 2026](https://img.shields.io/badge/IJEECS%202026-10.11591%2Fijeecs.v43.i1.pp259--270-2663EB)](https://doi.org/10.11591/ijeecs.v43.i1.pp259-270)
 [![UGM Thesis](https://img.shields.io/badge/UGM%20ETD-M.Cs.%20Thesis%202026-0BA5A0)](https://etd.repository.ugm.ac.id/penelitian/detail/282346)
 [![License: MIT](https://img.shields.io/badge/License-MIT-16A349.svg)](https://opensource.org/licenses/MIT)

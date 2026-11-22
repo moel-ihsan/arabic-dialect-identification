@@ -15,7 +15,7 @@ BASE_PATH     = os.path.dirname(os.path.abspath(__file__))
 ARTIFACTS_DIR = os.path.abspath(os.path.join(BASE_PATH, "..", "artifacts"))
 OUTPUT_DIR    = os.path.join(ARTIFACTS_DIR, "output")
 MODULE_PATH   = os.path.abspath(os.path.join(BASE_PATH, "..", "features.py"))
-CSS_PATH      = os.path.join(BASE_PATH, "style.css")   # ← satu folder dgn app.py
+CSS_PATH      = os.path.join(BASE_PATH, "style.css")   # Stylesheet alongside app.py
 
 # =============================================================================
 # CONSTANTS
@@ -476,7 +476,7 @@ if st.button(
     icon=":material/neurology:"
 ):
     if not text_input.strip():
-        st.warning("Masukkan teks terlebih dahulu.")
+        st.warning("Please enter Arabic text before running inference.")
     else:
         with st.spinner("Running inference…"):
             res = run_prediction(text_input, model, feat, le, bi, debug=debug_mode)
