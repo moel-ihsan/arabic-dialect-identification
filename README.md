@@ -1,3 +1,8 @@
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="app-streamlit/brand/svg/adi-logo-horizontal-white.svg">
+  <img alt="ADI — Arabic Dialect Identification" src="app-streamlit/brand/svg/adi-logo-horizontal-color.svg" width="320">
+</picture>
+
 # Imbalanced Levantine Arabic Dialect Identification
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Streamlit-0BA5A0?logo=streamlit)](https://arabic-dialect-identification.streamlit.app/)
@@ -86,7 +91,9 @@ To reproduce the leakage-free 5,644-dimensional feature matrix, resampling runs,
 - `z. analysis_token_exclusivity_error.ipynb` — dialect-exclusive token collapse analysis
 
 ### 4. Interactive Demo Application
-The `app-streamlit/` directory preserves the initial research prototype. The redesigned, production interactive dashboard and Git LFS model artifacts are maintained in [`moel-ihsan/arabic-dialect-id-demo`](https://github.com/moel-ihsan/arabic-dialect-id-demo) and deployed at https://arabic-dialect-identification.streamlit.app/.
+The `app-streamlit/` directory preserves the initial local prototype (updated with the ADI brand marks, neutral favicons, and `brand/svg/` vector assets). The redesigned production interactive dashboard and all 12 Git LFS model checkpoints are maintained in [`moel-ihsan/arabic-dialect-id-demo`](https://github.com/moel-ihsan/arabic-dialect-id-demo) and deployed live at https://arabic-dialect-identification.streamlit.app/.
+
+<img src="app-streamlit/dashboard_preview.png" alt="Arabic Dialect Identification Live Dashboard Preview" width="85%">
 
 ---
 
